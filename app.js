@@ -6,6 +6,7 @@ const Vending = require('./models/vending.js');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const ObjectId = require('mongodb').ObjectID;
 app.use(bodyParser.json())
 
 
@@ -32,17 +33,16 @@ app.post('/api/vendor/items', function(req, res) {
    })
 })
 
-app.put('/api/vendor/items/:itemId', function(req, res) {
+app.post('/api/vendor/items/:itemId', function(req, res) {
   let id = req.params.id
 
   Vending.updateOne({
       _id: new ObjectId(id)
-    }, {
+    }, {$set:{
       description: req.body.description,
       cost: req.body.cost,
       quantity: req.body.quantity
-    })
-
+    }})
     .then(function(results) {
       res.json({status: 'success'})
     })
